@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==================== PredictHQ Local Events Integration ==================== */
-    const predicthqApiKey = 'hYL6Gw0biq_XbksF3slaN7yuLAIyHvRXeMjJEEFT'; // Replace with your PredictHQ API key
+    const predicthqApiKey = 'F34y6UH863pf_gDGT9h33DF69xz4zdZtwiFji3Pi'; // Replace with your PredictHQ API key
 
     // Function to fetch and display local events
     function fetchLocalEvents(city) {
