@@ -30,7 +30,7 @@ header {
 
 .menu-toggle {
     display: none;
-    background-color: #555;
+    background-color: #1C4E80;
     color: white;
     border: none;
     padding: 0.5em 1em;
@@ -38,6 +38,10 @@ header {
     cursor: pointer;
     border-radius: 4px;
 }
+
+    .menu-toggle:hover {
+        background-color: #1C4E80;
+    }
 
 .main-nav {
     display: flex;
