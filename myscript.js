@@ -6,7 +6,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
 }).addTo(map);
 
-// OpenWeatherMap API key
+// OpenWeatherMap API key lkl
 var apiKey = '0a3ca98b38e84a407ded4d891b605c50';
 
 // Layers for precipitation, clouds, pressure, temperature, and wind
