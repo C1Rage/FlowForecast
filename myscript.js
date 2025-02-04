@@ -30,6 +30,75 @@ L.control.layers(null, overlayMaps).addTo(map);
 // Set default layers
 precipitationLayer.addTo(map);
 
+document.addEventListener("DOMContentLoaded", function () {
+    const citySearchInput = document.getElementById("citySearch");
+    const searchButton = document.getElementById("searchButton");
+    const suggestionsContainer = document.createElement("div");
+    suggestionsContainer.classList.add("suggestions-container");
+    citySearchInput.parentNode.appendChild(suggestionsContainer);
+
+    function searchCity(city) {
+        fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const lat = data[0].lat;
+                    const lon = data[0].lon;
+
+                    map.setView([lat, lon], 10);
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(`${city}`)
+                        .openPopup();
+
+                    updateWeatherAndTraffic(city, lat, lon);
+
+                    // Scroll to results
+                    document.querySelector(".content-wrapper").scrollIntoView({ behavior: "smooth" });
+                } else {
+                    alert("City not found. Please try another city.");
+                }
+            })
+            .catch(error => alert("Failed to retrieve city data."));
+    }
+
+    citySearchInput.addEventListener("input", function () {
+        const query = citySearchInput.value.trim();
+        if (query.length > 2) {
+            fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsContainer.innerHTML = "";
+                    if (data.length > 0) {
+                        data.forEach(city => {
+                            const suggestion = document.createElement("div");
+                            suggestion.classList.add("suggestion-item");
+                            suggestion.textContent = `${city.name}, ${city.country}`;
+                            suggestion.addEventListener("click", function () {
+                                citySearchInput.value = city.name;
+                                suggestionsContainer.innerHTML = "";
+                                searchCity(city.name);
+                            });
+                            suggestionsContainer.appendChild(suggestion);
+                        });
+                    }
+                })
+                .catch(error => console.error("Error fetching city suggestions:", error));
+        } else {
+            suggestionsContainer.innerHTML = "";
+        }
+    });
+
+    searchButton.addEventListener("click", function () {
+        const city = citySearchInput.value.trim();
+        if (city) {
+            searchCity(city);
+        } else {
+            alert("Please enter a city.");
+        }
+    });
+});
+
+
 // TomTom Traffic API key
 var tomtomApiKey = 'a3QDSH5n7djQK1sLSjglAJVZPNNxOjH6';
 // OpenWeatherMap API key
@@ -87,6 +156,8 @@ document.getElementById('locationButton').addEventListener('click', function () 
 
         // Update weather and traffic information
         updateWeatherAndTraffic(city, lat, lon);
+
+        document.querySelector(".content-wrapper").scrollIntoView({ behavior: "smooth" });
     });
 });
 

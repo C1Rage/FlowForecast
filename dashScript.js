@@ -233,8 +233,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         trafficMap.setCenter({ lat, lng: lon });
                         trafficMap.setZoom(13);
                         updateTrafficInfo(lat, lon);
+
+                        document.querySelector(".dashboard").scrollIntoView({ behavior: "smooth" });
                     });
+                    
             })
+            
             .catch(error => {
                 console.error('Error during location retrieval:', error);
                 alert('Failed to retrieve your location.');
@@ -425,8 +429,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-
-
     /* ==================== Initial Load ==================== */
     // Optionally, load default weather and traffic data
     // For example, load data for a default city
@@ -435,7 +437,85 @@ document.addEventListener('DOMContentLoaded', () => {
     updateForecast(defaultCity);
     updateTrafficMap(defaultCity);
     fetchLocalEvents(defaultCity);
+
+    const citySearchInput = document.getElementById("citySearch");
+    const suggestionsContainer = document.createElement("div");
+    suggestionsContainer.classList.add("suggestions-container");
+    citySearchInput.parentNode.style.position = "relative"; 
+    citySearchInput.parentNode.appendChild(suggestionsContainer);
+
+    var apiKey = '0a3ca98b38e84a407ded4d891b605c50';
+
+    function searchCity(city) {
+        fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const lat = data[0].lat;
+                    const lon = data[0].lon;
+    
+                    // Fix map variable reference
+                    weatherMap.setView([lat, lon], 10);
+                    L.marker([lat, lon]).addTo(weatherMap)
+                        .bindPopup(`${city}`)
+                        .openPopup();
+    
+                    // Call functions correctly
+                    fetchWeatherData(city);
+                    updateForecast(city);
+                    updateTrafficMap(city);
+                    fetchLocalEvents(city);
+    
+                    // Scroll to results
+                    document.querySelector(".dashboard").scrollIntoView({ behavior: "smooth" });
+                } else {
+                    alert("City not found. Please try another city.");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching city data:", error);
+                
+            });
+    }
+    
+
+    citySearchInput.addEventListener("input", function () {
+        const query = citySearchInput.value.trim();
+        if (query.length > 2) {
+            fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsContainer.innerHTML = "";
+                    if (data.length > 0) {
+                        data.forEach(city => {
+                            const suggestion = document.createElement("div");
+                            suggestion.classList.add("suggestion-item");
+                            suggestion.textContent = `${city.name}, ${city.country}`;
+                            suggestion.addEventListener("click", function () {
+                                citySearchInput.value = city.name;
+                                suggestionsContainer.innerHTML = "";
+                                searchCity(city.name);
+                            });
+                            suggestionsContainer.appendChild(suggestion);
+                        });
+                    }
+                })
+                .catch(error => console.error("Error fetching city suggestions:", error));
+        } else {
+            suggestionsContainer.innerHTML = "";
+        }
+    });
+
+    searchButton.addEventListener("click", function () {
+        const city = citySearchInput.value.trim();
+        if (city) {
+            searchCity(city);
+        } else {
+            alert("Please enter a city.");
+        }
+    });
 });
+
 
 /* ==================== Header Scroll Effect ==================== */
 window.addEventListener('scroll', function () {

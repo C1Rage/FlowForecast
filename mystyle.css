@@ -22,6 +22,25 @@ header {
     transition: background-color 0.3s ease-in-out;
 }
 
+.suggestions-container {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    width: 80%;
+    margin-top: 35px;
+    max-width: 400px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #e4eaf2;
+}
+
 .logo img {
     margin-left: 10px;
     width: 150px;
@@ -628,6 +647,11 @@ button.next {
     input[type="text"] {
         width: 80%;
         margin-bottom: 1em;
+    }
+
+    .suggestions-container {
+        width: 74%;
+        max-width: 400px;
     }
 
     .hero-section {
