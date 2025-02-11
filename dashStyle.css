@@ -30,10 +30,10 @@ header {
 
 .suggestions-container {
     position: absolute;
-    width: 80%;
+    width: 37%; /* Uses most of the screen width */
+    max-width: none; /* Allows flexibility on smaller screens */
     margin-top: -17px;
     left: 28%;
-    max-width: 400px;
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -56,10 +56,47 @@ header {
 }
 
 /* Mobile-friendly adjustments */
+@media (max-width: 1440px) {
+    .suggestions-container {
+        width: 47%;
+        left: 50%;
+        transform: translateX(-50%); /* Centers the suggestions */
+    }
+
+    .suggestion-item {
+        font-size: 16px; /* Increases readability on small screens */
+        padding: 12px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .suggestions-container {
+        width: 67%;
+        left: 50%;
+        transform: translateX(-50%); /* Centers the suggestions */
+    }
+
+    .suggestion-item {
+        font-size: 16px; /* Increases readability on small screens */
+        padding: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .suggestions-container {
+        width: 85%;
+        left: 50%;
+        transform: translateX(-50%); /* Centers the suggestions */
+    }
+
+    .suggestion-item {
+        font-size: 16px; /* Increases readability on small screens */
+        padding: 12px;
+    }
+}
+
 @media (max-width: 1920px) {
     .suggestions-container {
-        width: 43%; /* Uses most of the screen width */
-        max-width: none; /* Allows flexibility on smaller screens */
         left: 50%;
         transform: translateX(-50%); /* Centers the suggestions */
     }
@@ -116,7 +153,7 @@ header {
         }
 
 .hero-section {
-    background-image: url(images/hero-img1.jpg);
+    background-image: url(images/hero-img2.png);
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -357,6 +394,28 @@ footer {
         margin: 0;
     }
 
+    .footer-section a {
+        color: black;
+        text-decoration: none;
+        position: relative;
+    }
+
+    .footer-section a::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: black;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+    }
+
+    .footer-section a:hover::after {
+        width: 100%;
+    }
+
 .footer-bottom {
     border-top: ridge;
     padding: 1em;
@@ -390,6 +449,68 @@ footer {
         .footer-bottom a:hover::after {
             width: 100%;
         }
+
+        .menu {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #1C4E80;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            z-index: 2000;
+        }
+        .menu-content {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            right: 0;
+            background: #1C4E80;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .menu:hover .menu-content {
+            display: block;
+        }
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 5px 8px;
+            margin: 4px 0;
+            background: #1C4E80;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .menu a:hover {
+            background: #0056b3;
+        }
+        @media (max-width: 600px) {
+            .menu {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+            .menu-content {
+                bottom: 45px;
+            }
+            .menu a {
+                font-size: 12px;
+                padding: 4px 6px;
+            }
+        }
+
+        .main-nav a.active {
+            border-bottom: 3px solid white;
+          }
 
 .highlights {
     background: #fff;
